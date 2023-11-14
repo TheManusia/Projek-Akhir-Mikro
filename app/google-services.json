@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "628746567101",
+    "firebase_url": "https://projek-akhir-mikro-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "projek-akhir-mikro",
+    "storage_bucket": "projek-akhir-mikro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:628746567101:android:75eb5ce93f53cf44a926d4",
+        "android_client_info": {
+          "package_name": "id.themanusia.projekakhirmikro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBY1h8WliJUyyygRtridhS04nWhrjX3zBg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
