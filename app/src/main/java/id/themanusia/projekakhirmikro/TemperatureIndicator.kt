@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -41,26 +42,27 @@ fun TemperatureIndicator(
     maxValue: Int,
     progressBackgroundColor: Color,
     progressIndicatorColor: Color,
-    diameter: Dp = 200.dp
+    diameter: Dp = 200.dp,
+    title: AnnotatedString,
+    suffix: AnnotatedString,
+    textStyle: SpanStyle,
 ) {
 
     val stroke = with(LocalDensity.current) {
         Stroke(width = 6.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round)
     }
 
-    Column(verticalArrangement = Arrangement.Center,
+    Column(modifier = modifier,
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
         Text(modifier = Modifier.padding(16.dp),
-            text = buildAnnotatedString {
-                val defaultSpan =
-                    Typography.titleLarge.toSpanStyle()
-                append(AnnotatedString(text = "Temperature", spanStyle = defaultSpan))
-            })
-        Box(modifier = modifier, contentAlignment = Alignment.Center) {
+            text = title)
+        Box(contentAlignment = Alignment.Center) {
             ProgressStatus(
                 currentValue = currentValue,
                 progressIndicatorColor = progressIndicatorColor,
-                progressBackgroundColor = progressBackgroundColor,
+                suffix = suffix,
+                textStyle = textStyle
             )
 
             val animateFloat = remember { Animatable(0f) }
@@ -96,17 +98,14 @@ fun TemperatureIndicator(
 private fun ProgressStatus(
     currentValue: Int,
     progressIndicatorColor: Color,
-    progressBackgroundColor: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    suffix: AnnotatedString,
+    textStyle: SpanStyle
 ) {
     Text(modifier = modifier, text = buildAnnotatedString {
-        val emphasisSpan =
-            Typography.displayLarge.copy(color = progressIndicatorColor)
-                .toSpanStyle()
-        val defaultSpan =
-            Typography.titleLarge.copy(color = progressBackgroundColor).toSpanStyle()
+        val emphasisSpan = textStyle.copy(color = progressIndicatorColor)
         append(AnnotatedString("$currentValue", spanStyle = emphasisSpan))
-        append(AnnotatedString(text = " °C", spanStyle = defaultSpan))
+        append(suffix)
     }
     )
 }
@@ -141,6 +140,17 @@ fun CircularIndicatorPreview() {
             maxValue = 100,
             progressBackgroundColor = Purple80,
             progressIndicatorColor = PurpleGrey40,
+            title = buildAnnotatedString {
+                val defaultSpan =
+                    Typography.titleLarge.toSpanStyle()
+                append(AnnotatedString(text = "Temperature", spanStyle = defaultSpan))
+            },
+            suffix = buildAnnotatedString {
+                val defaultSpan =
+                    Typography.titleLarge.copy(color = Purple80).toSpanStyle()
+                append(AnnotatedString(text = " °C", spanStyle = defaultSpan))
+            },
+            textStyle = Typography.displayLarge.toSpanStyle()
         )
     }
 }

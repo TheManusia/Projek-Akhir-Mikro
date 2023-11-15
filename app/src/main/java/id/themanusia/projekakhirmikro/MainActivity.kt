@@ -5,11 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(modifier: Modifier = Modifier) {
+fun Greeting() {
     val temperature = remember {
         mutableStateOf(0.0)
     }
@@ -84,9 +84,57 @@ fun Greeting(modifier: Modifier = Modifier) {
             maxValue = 40,
             progressBackgroundColor = Purple80,
             progressIndicatorColor = PurpleGrey40,
+            title = buildAnnotatedString {
+                val defaultSpan =
+                    Typography.titleLarge.toSpanStyle()
+                append(AnnotatedString(text = "Temperature", spanStyle = defaultSpan))
+            },
+            suffix = buildAnnotatedString {
+                val defaultSpan =
+                    Typography.titleLarge.copy(color = Purple80).toSpanStyle()
+                append(AnnotatedString(text = "°C", spanStyle = defaultSpan))
+            },
+            textStyle = Typography.displayLarge.toSpanStyle()
         )
-        Text(text = "Humadity: ${humidity.value}%")
-        Text(text = "Heat Index: ${heatIndex.value}")
+        Row(modifier = Modifier.padding(16.dp)) {
+            TemperatureIndicator(
+                currentValue = humidity.value.toInt(),
+                maxValue = 100,
+                diameter = 120.dp,
+                progressBackgroundColor = Purple80,
+                progressIndicatorColor = PurpleGrey40,
+                title = buildAnnotatedString {
+                    val defaultSpan =
+                        Typography.bodyLarge.toSpanStyle()
+                    append(AnnotatedString(text = "Humidity", spanStyle = defaultSpan))
+                },
+                suffix = buildAnnotatedString {
+                    val defaultSpan =
+                        Typography.titleLarge.copy(color = Purple80).toSpanStyle()
+                    append(AnnotatedString(text = "%", spanStyle = defaultSpan))
+                },
+                textStyle = Typography.headlineLarge.toSpanStyle()
+            )
+            TemperatureIndicator(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                currentValue = heatIndex.value.toInt(),
+                maxValue = 100,
+                diameter = 120.dp,
+                progressBackgroundColor = Purple80,
+                progressIndicatorColor = PurpleGrey40,
+                title = buildAnnotatedString {
+                    val defaultSpan =
+                        Typography.bodyLarge.toSpanStyle()
+                    append(AnnotatedString(text = "Heat Index", spanStyle = defaultSpan))
+                },
+                suffix = buildAnnotatedString {
+                    val defaultSpan =
+                        Typography.titleLarge.copy(color = Purple80).toSpanStyle()
+                    append(AnnotatedString(text = "°C", spanStyle = defaultSpan))
+                },
+                textStyle = Typography.headlineLarge.toSpanStyle()
+            )
+        }
     }
 }
 
