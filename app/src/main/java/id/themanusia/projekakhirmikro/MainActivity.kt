@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,6 +60,18 @@ fun Greeting() {
         mutableStateOf(0.0)
     }
 
+    val random = remember {
+        mutableStateOf(0)
+    }
+
+    val tempRandom = remember {
+        mutableStateOf(0)
+    }
+
+    val count = remember {
+        mutableStateOf(0)
+    }
+
     val firebaseDatabase = FirebaseDatabase.getInstance()
     val databaseReference = firebaseDatabase.getReference("dht22")
 
@@ -69,6 +82,7 @@ fun Greeting() {
             temperature.value = data.temperature
             humidity.value = data.humidity
             heatIndex.value = data.heatIndex
+            random.value = data.random
         }
 
         override fun onCancelled(error: DatabaseError) {
@@ -76,9 +90,25 @@ fun Greeting() {
         }
     })
 
-    Column( modifier = Modifier.fillMaxSize(),
+    Column(
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(modifier = Modifier.padding(16.dp), text = buildAnnotatedString {
+            if (random.value == tempRandom.value) {
+                count.value = count.value + 1
+            } else {
+                count.value = 0
+                tempRandom.value = random.value
+            }
+
+            if (count.value < 1000) {
+                append("Device Online")
+            } else {
+                append("Device Offline")
+            }
+        })
         TemperatureIndicator(
             currentValue = temperature.value.toInt(),
             maxValue = 40,
