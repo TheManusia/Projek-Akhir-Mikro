@@ -39,7 +39,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting()
+                    val firebaseDatabase = FirebaseDatabase.getInstance()
+                    val databaseReference = firebaseDatabase.getReference("dht22")
+                    var num = 0
+                    databaseReference.child("random").get().addOnCompleteListener {
+                        num = it.result.value.toString().toInt()
+                    }
+                    Greeting(num)
                 }
             }
         }
@@ -47,7 +53,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting() {
+fun Greeting(tempnum: Int = -1) {
     val temperature = remember {
         mutableStateOf(0.0)
     }
@@ -65,7 +71,7 @@ fun Greeting() {
     }
 
     val tempRandom = remember {
-        mutableStateOf(0)
+        mutableStateOf(tempnum)
     }
 
     val count = remember {
@@ -74,10 +80,6 @@ fun Greeting() {
 
     val firebaseDatabase = FirebaseDatabase.getInstance()
     val databaseReference = firebaseDatabase.getReference("dht22")
-
-    databaseReference.child("random").get().addOnSuccessListener {
-        tempRandom.value = it.value.toString().toInt()
-    }
 
     databaseReference.addValueEventListener(object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
