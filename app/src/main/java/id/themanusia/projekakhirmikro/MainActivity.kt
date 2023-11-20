@@ -69,11 +69,15 @@ fun Greeting() {
     }
 
     val count = remember {
-        mutableStateOf(0)
+        mutableStateOf(1000)
     }
 
     val firebaseDatabase = FirebaseDatabase.getInstance()
     val databaseReference = firebaseDatabase.getReference("dht22")
+
+    databaseReference.child("random").get().addOnSuccessListener {
+        tempRandom.value = it.value.toString().toInt()
+    }
 
     databaseReference.addValueEventListener(object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
