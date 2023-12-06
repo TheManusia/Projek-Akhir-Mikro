@@ -55,15 +55,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(tempnum: Int = -1) {
     val temperature = remember {
-        mutableStateOf(0.0)
+        mutableStateOf(0.0f)
     }
 
     val humidity = remember {
-        mutableStateOf(0.0)
+        mutableStateOf(0.0f)
     }
 
     val heatIndex = remember {
-        mutableStateOf(0.0)
+        mutableStateOf(0.0f)
     }
 
     val random = remember {
@@ -116,7 +116,7 @@ fun Greeting(tempnum: Int = -1) {
             }
         })
         TemperatureIndicator(
-            currentValue = temperature.value.toInt(),
+            currentValue = temperature.value,
             maxValue = 40,
             progressBackgroundColor = Purple80,
             progressIndicatorColor = PurpleGrey40,
@@ -134,7 +134,7 @@ fun Greeting(tempnum: Int = -1) {
         )
         Row(modifier = Modifier.padding(16.dp)) {
             TemperatureIndicator(
-                currentValue = humidity.value.toInt(),
+                currentValue = humidity.value,
                 maxValue = 100,
                 diameter = 120.dp,
                 progressBackgroundColor = Purple80,
@@ -153,7 +153,7 @@ fun Greeting(tempnum: Int = -1) {
             )
             TemperatureIndicator(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                currentValue = heatIndex.value.toInt(),
+                currentValue = heatIndex.value,
                 maxValue = 100,
                 diameter = 120.dp,
                 progressBackgroundColor = Purple80,

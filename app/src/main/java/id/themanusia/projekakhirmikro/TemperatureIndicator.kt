@@ -38,7 +38,7 @@ import id.themanusia.projekakhirmikro.ui.theme.*
 @Composable
 fun TemperatureIndicator(
     modifier: Modifier = Modifier,
-    currentValue: Int,
+    currentValue: Float,
     maxValue: Int,
     progressBackgroundColor: Color,
     progressIndicatorColor: Color,
@@ -72,7 +72,9 @@ fun TemperatureIndicator(
                     animationSpec = tween(durationMillis = 2000, easing = FastOutSlowInEasing)
                 )
             }
-            val sweep: Float by animateFloatAsState(currentValue / maxValue.toFloat() * 360f)
+            val sweep: Float by animateFloatAsState(currentValue / maxValue.toFloat() * 360f,
+                label = ""
+            )
 
             Canvas(
                 Modifier
@@ -96,7 +98,7 @@ fun TemperatureIndicator(
 
 @Composable
 private fun ProgressStatus(
-    currentValue: Int,
+    currentValue: Float,
     progressIndicatorColor: Color,
     modifier: Modifier = Modifier,
     suffix: AnnotatedString,
@@ -104,7 +106,7 @@ private fun ProgressStatus(
 ) {
     Text(modifier = modifier, text = buildAnnotatedString {
         val emphasisSpan = textStyle.copy(color = progressIndicatorColor)
-        append(AnnotatedString("$currentValue", spanStyle = emphasisSpan))
+        append(AnnotatedString(String.format("%.1f", currentValue), spanStyle = emphasisSpan))
         append(suffix)
     }
     )
@@ -136,7 +138,7 @@ private fun DrawScope.drawCircularProgressIndicator(
 fun CircularIndicatorPreview() {
     ProjekAkhirMikroTheme {
         TemperatureIndicator(
-            currentValue = 32,
+            currentValue = 32f,
             maxValue = 100,
             progressBackgroundColor = Purple80,
             progressIndicatorColor = PurpleGrey40,
